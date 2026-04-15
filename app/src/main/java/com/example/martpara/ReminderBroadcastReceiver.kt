@@ -17,9 +17,9 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
 
             val notificationManager = NotificationManagerCompat.from(context)
             val builder = NotificationCompat.Builder(context, ReminderApplication.channelID)
-                .setSmallIcon(R.drawable.my_notification_pic)
-                .setContentTitle("New reminder!")      // исправлено
-                .setContentText(text)                  // исправлено
+                .setSmallIcon(R.drawable.my_notification_pic) // хз
+                .setContentTitle("New reminder!")      // не исправлено
+                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
