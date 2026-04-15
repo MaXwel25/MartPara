@@ -1,13 +1,17 @@
 package com.example.martpara
 
+
 import androidx.lifecycle.LiveData
 import com.example.martpara.dataBase.DataBase
 import com.example.martpara.dataBase.Reminds
+import com.example.martpara.dataBase.DBRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.lang.IllegalStateException
+import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.flowOf
 
 class AppRepository {
     companion object{
@@ -25,25 +29,13 @@ class AppRepository {
     }
 
     val myDB by lazy {
-        com.example.martpara.dataBase.DB_repository(
-            DataBase.Companion.getDatabase(
-                ReminderApplication.context
-            )
-        )
-    }
+        DBRepository(DataBase.getDatabase(ReminderApplication.context).dbDAO()) }
 
     private val myCoroutineScope = CoroutineScope(Dispatchers.Main) // работа в основном потоке
 
     val listReminds: LiveData<List<Reminds>> = myDB.getReminds().asLiveData()
 
     fun addRemind(remind: Reminds) {
-        myCoroutineScope.launch {
-            myDB.insertRemind(remind)
-        }
-    }
-
-    fun addRemind(remind: Reminds)
-    {
         myCoroutineScope.launch {
             myDB.insertRemind(remind)
         }
