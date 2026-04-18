@@ -1,11 +1,13 @@
 package com.example.martpara.composeUI
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.martpara.MainViewModel
@@ -62,6 +65,22 @@ fun ReminderItem (reminder: Reminds, viewModel: MainViewModel) {
                 style = TextStyle(color = colorResource(R.color.purple_700)),
                 modifier = Modifier.padding(start = 8.dp)
             )
+            Text(
+                text = Utils.millisecondsToTime(reminder.datetime),
+                style = TextStyle(color = colorResource(R.color.purple_700)),
+                modifier = Modifier.padding(8.dp)
+            )
+            Image(
+                painter = painterResource(R.drawable.ic_launcher_background), // иконка (можно свою)
+                contentDescription = "Delete",
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(8.dp)
+                    .clickable{
+                        viewModel.deleteReminder(context, reminder)
+                    }
+            )
+
         }
     }
 }

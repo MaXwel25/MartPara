@@ -31,7 +31,7 @@ class AppRepository {
     val myDB by lazy {
         DBRepository(DataBase.getDatabase(ReminderApplication.context).dbDAO()) }
 
-    private val myCoroutineScope = CoroutineScope(Dispatchers.Main) // работа в основном потоке
+    private val myCoroutineScope = CoroutineScope(Dispatchers.Main) // работа в основном потоке (область видимости для корутин)
 
     val listReminds: LiveData<List<Reminds>> = myDB.getReminds().asLiveData()
 
@@ -48,6 +48,6 @@ class AppRepository {
     }
 
     fun onDestroy() {
-        myCoroutineScope.cancel()
+        myCoroutineScope.cancel() //чтобы закрыть все корутины, а не по отдельности
     }
 }
