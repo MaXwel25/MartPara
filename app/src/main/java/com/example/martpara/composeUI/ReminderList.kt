@@ -38,7 +38,7 @@ fun ReminderList(viewModel: MainViewModel= viewModel()) {
         }
     }
 
-    LazyColumn(
+    LazyColumn( // для плавной размектки
         modifier = Modifier.fillMaxSize()
     ) {
         itemsIndexed(remindersList) {
