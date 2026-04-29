@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp")
+
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -48,12 +49,19 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
 
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
     implementation("androidx.room:room-runtime:2.8.4")
     implementation("androidx.room:room-ktx:2.8.4")
     implementation("androidx.compose.material3:material3:1.4.0")
     // implementation("androidx.room:room-compiler:2.8.4")
     ksp("androidx.room:room-compiler:2.8.4")
-    //ksp(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // or latest version
     implementation("androidx.core:core-ktx:1.13.1")

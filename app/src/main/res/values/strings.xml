@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">MartPara</string>
+    <string name="choose_date">Choose a date</string>
+    <string name="choose_time">Choose a time</string>
+    <string name="form_create">Create</string>
 </resources>
