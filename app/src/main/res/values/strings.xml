@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">MartPara</string>
+    <string name="app_title">MartPara</string>
     <string name="choose_date">Choose a date</string>
     <string name="choose_time">Choose a time</string>
     <string name="form_create">Create</string>
+    <string name="create_reminder">Create a reminder</string>
+    <string name="select_date">Select a date</string>
+    <string name="form_text_hint">Reminder text</string>
+    <string name="choose_a_time">Choose a time</string>
+    <string name="permission_warning">Разрешение не выдано — уведомления могут не работать</string>
+    <string name="select_a_date">Поиск даты</string>
 </resources>

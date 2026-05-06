@@ -1,30 +1,129 @@
 package com.example.martpara
 
+import android.app.AlarmManager
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Bundle
+import android.provider.Telephony
+import android.view.View
+import android.view.WindowInsetsController
+import android.view.WindowInsets
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.martpara.ui.theme.MartParaTheme
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import com.example.martpara.composeUI.Form
+import com.example.martpara.composeUI.ReminderList
+
 
 class MainActivity : ComponentActivity() {
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (!isGranted) {
+            Toast.makeText(this, R.string.permission_warning, Toast.LENGTH_LONG).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            window.decorView.setOnApplyWindowInsetsListener { view, insets ->
+                val statusBarInsets = insets.getInsets(WindowInsets.Type.statusBars())
+                view.setBackgroundColor(android.graphics.Color.BLACK)
+                view.setPadding(0, statusBarInsets.top, 0, 0)
+                insets
+            }
+        } else {
+            window.statusBarColor = android.graphics.Color.BLACK
+        }
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            !NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            !alarmManager.canScheduleExactAlarms()) {
+            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+            startActivity(intent)
+        }
+
+        setContent {
+            WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+                controller.hide(WindowInsetsCompat.Type.systemBars())
+                controller.hide(WindowInsetsCompat.Type.navigationBars())
+                controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        }
+
+
+
         setContent {
             MartParaTheme {
-                CalculatorApp()
+                // скрытие системных баров
+                WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+                    controller.hide(WindowInsetsCompat.Type.systemBars())
+                    controller.hide(WindowInsetsCompat.Type.navigationBars())
+                    controller.systemBarsBehavior =
+                        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
+
+                val viewModel: MainViewModel = viewModel()
+                viewModel.alarmManager = alarmManager
+
+                // основной интерфейс приложения
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    colorResource(R.color.black),
+                                    colorResource(R.color.navy)
+                                )
+                            )
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AppTitle()
+                    Form(viewModel)
+                    ReminderList(viewModel)
+                }
             }
         }
     }
@@ -188,4 +287,17 @@ fun CalculatorAppPreview() {
     MartParaTheme {
         CalculatorApp()
     }
+}
+
+@Composable
+fun AppTitle() {
+    Text(
+        text = stringResource(R.string.app_title),
+        style = TextStyle(
+            color = colorResource(R.color.white),
+            fontSize = 26.sp,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Thin
+        )
+    )
 }

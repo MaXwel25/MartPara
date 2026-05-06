@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-    alias(libs.plugins.ksp)
+    //alias(libs.plugins.ksp)
 }
 
 android {
@@ -59,9 +59,14 @@ dependencies {
     implementation("androidx.room:room-ktx:2.8.4")
     implementation("androidx.compose.material3:material3:1.4.0")
     // implementation("androidx.room:room-compiler:2.8.4")
-    ksp("androidx.room:room-compiler:2.8.4")
-    ksp(libs.androidx.room.compiler)
+    //ksp("androidx.room:room-compiler:2.8.4")
+    //ksp(libs.androidx.room.compiler)
+    implementation("androidx.compose.ui:ui:1.6.8")
 
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-graphics:1.6.8")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // or latest version
     implementation("androidx.core:core-ktx:1.13.1")
